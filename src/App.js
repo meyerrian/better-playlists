@@ -100,6 +100,10 @@ class App extends Component {
   render() {
     let purple = 'purple'
     let titleStyle = {color: purple, 'font-size': '80px'}
+    let playlistToRender = this.state.serverData.user ? this.state.serverData.user.playlists.filter(playlist =>
+    playlist.name.toLowerCase().includes(
+      this.state.filterString.toLowerCase()
+    )) :[]
     return (
       <div className="App">
         {this.state.serverData.user ?
@@ -107,15 +111,12 @@ class App extends Component {
             <h1 style={titleStyle}>
               {this.state.serverData.user.name}'s Playlists
             </h1>
-            <PlaylistCounter playlists= {this.state.serverData.user.playlists}/>
-            <Hours playlists= {this.state.serverData.user.playlists}/>
+            <PlaylistCounter playlists={playlistToRender}/>
+            <Hours playlists={playlistToRender}/>
             <Search onTextChange ={text =>{
               this.setState({filterString: text})
             }}/>
-            {this.state.serverData.user.playlists.filter(playlist =>
-              playlist.name.toLowerCase().includes(
-                this.state.filterString.toLowerCase())
-            ).map(playlist =>
+            {playlistToRender.map(playlist =>
               <Playlist playlist={playlist}/>
             )}
           </div> : <h2>Loading...</h2>
